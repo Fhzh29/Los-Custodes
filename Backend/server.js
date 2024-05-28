@@ -26,8 +26,9 @@ connection.connect(err => {
 
 // Example route to fetch data
 app.get('/api/data', (req, res) => {
-    connection.query('SELECT * FROM your-table', (err, results) => {
+    connection.query('SELECT * FROM Product', (err, results) => {
         if (err) {
+            console.error('Error fetching data:', err);
             res.status(500).send('Error fetching data');
             return;
         }

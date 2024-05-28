@@ -1,8 +1,11 @@
-<div *ngIf="data.length > 0">
+<div *ngIf="errorMessage">{{ errorMessage }}</div>
+<div *ngIf="!errorMessage && data.length > 0">
   <ul>
-    <li *ngFor="let item of data">{{ item }}</li>
+    <li *ngFor="let item of data">
+      {{ item.ProductID }} - {{ item.ProductName }} - {{ item.Description }} - ${{ item.UnitPrice }} - Stock: {{ item.Stock }} - CategoryID: {{ item.CategoryID }}
+    </li>
   </ul>
 </div>
-<div *ngIf="data.length === 0">
+<div *ngIf="!errorMessage && data.length === 0">
   No data available.
 </div>
