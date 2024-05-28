@@ -8,7 +8,7 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-// MySQL connection configuration
+// MySQL configuracion de conecxion
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -24,7 +24,7 @@ connection.connect(err => {
     console.log('Connected to MySQL');
 });
 
-// Example route to fetch data
+// recuperar data
 app.get('/api/data', (req, res) => {
     connection.query('SELECT * FROM Product', (err, results) => {
         if (err) {
@@ -33,6 +33,49 @@ app.get('/api/data', (req, res) => {
             return;
         }
         res.json(results);
+    });
+});
+
+// insertar data
+app.post('/api/data', (req, res) => {
+    const { name, price, description } = req.body;
+    const query = 'INSERT INTO Product (name, price, description) VALUES (?, ?, ?)';
+    connection.query(query, [name, price, description], (err, results) => {
+        if (err) {
+            console.error('Error inserting data:', err);
+            res.status(500).send('Error inserting data');
+            return;
+        }
+        res.status(201).send('Data inserted successfully');
+    });
+});
+
+// actualizar data
+app.put('/api/data/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, price, description } = req.body;
+    const query = 'UPDATE Product SET name = ?, price = ?, description = ? WHERE id = ?';
+    connection.query(query, [name, price, description, id], (err, results) => {
+        if (err) {
+            console.error('Error updating data:', err);
+            res.status(500).send('Error updating data');
+            return;
+        }
+        res.send('Data updated successfully');
+    });
+});
+
+// borrar data
+app.delete('/api/data/:id', (req, res) => {
+    const { id } = req.params;
+    const query = 'DELETE FROM Product WHERE id = ?';
+    connection.query(query, [id], (err, results) => {
+        if (err) {
+            console.error('Error deleting data:', err);
+            res.status(500).send('Error deleting data');
+            return;
+        }
+        res.send('Data deleted successfully');
     });
 });
 
