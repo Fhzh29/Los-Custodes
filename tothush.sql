@@ -25,7 +25,71 @@ SET time_zone = "+00:00";
 -- Base de datos: `tothush`
 --
 
--- --------------------------------------------------------
+DELIMITER $$
+--
+-- Procedimientos
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CopyDatabase` ()   BEGIN
+    DECLARE src_db VARCHAR(64) DEFAULT 'tothush';
+    DECLARE dest_db VARCHAR(64);
+    DECLARE tbl_name VARCHAR(64);
+    DECLARE done INT DEFAULT 0;
+
+    DECLARE cur CURSOR FOR
+        SELECT table_name FROM information_schema.tables
+        WHERE table_schema = src_db;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    -- Generar nombre de la base de datos de destino
+    SET dest_db = CONCAT(src_db, '_backup_', DATE_FORMAT(NOW(), '%Y%m%d%H%i'));
+
+    -- Crear la base de datos de destino
+    SET @create_db = CONCAT('CREATE DATABASE ', dest_db);
+    PREPARE stmt FROM @create_db;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+
+    -- Abrir cursor para iterar sobre las tablas
+    OPEN cur;
+
+    read_loop: LOOP
+        FETCH cur INTO tbl_name;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        -- Copiar cada tabla a la base de datos de destino
+        SET @copy_table = CONCAT('CREATE TABLE ', dest_db, '.', tbl_name, ' LIKE ', src_db, '.', tbl_name);
+        PREPARE stmt FROM @copy_table;
+        EXECUTE stmt;
+        DEALLOCATE PREPARE stmt;
+
+        SET @insert_data = CONCAT('INSERT INTO ', dest_db, '.', tbl_name, ' SELECT * FROM ', src_db, '.', tbl_name);
+        PREPARE stmt FROM @insert_data;
+        EXECUTE stmt;
+        DEALLOCATE PREPARE stmt;
+    END LOOP;
+
+    CLOSE cur;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetBackupEventStatus` ()   BEGIN
+    SELECT 
+        EVENT_NAME,
+        IFNULL(LAST_EXECUTED, NOW()) AS LAST_EXECUTED,
+        INTERVAL_VALUE,
+        INTERVAL_FIELD,
+        ADDTIME(IFNULL(LAST_EXECUTED, NOW()), CONCAT(INTERVAL_VALUE, ' ', INTERVAL_FIELD)) AS NEXT_EXECUTION,
+        TIMESTAMPDIFF(SECOND, NOW(), ADDTIME(IFNULL(LAST_EXECUTED, NOW()), CONCAT(INTERVAL_VALUE, ' ', INTERVAL_FIELD))) AS SECONDS_UNTIL_NEXT_EXECUTION
+    FROM 
+        information_schema.EVENTS
+    WHERE 
+        EVENT_NAME = 'backup_event';
+END$$
+
+DELIMITER ;
+
 
 --
 -- Estructura de tabla para la tabla `Category`
