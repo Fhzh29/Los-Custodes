@@ -1,1 +1,88 @@
-<p>gestion-inventario works!</p>
+<div *ngIf="errorMessage">{{ errorMessage }}</div>
+<div>
+  <button (click)="openAddModal()">Añadir</button>
+</div>
+<div *ngIf="!errorMessage && data.length > 0">
+  <table>
+    <thead>
+      <tr>
+        <th>Producto ID</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Categoría ID</th>
+        <th>Actiones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of data">
+        <td>{{ item.ProductID }}</td>
+        <td>{{ item.ProductName }}</td>
+        <td>{{ item.Description }}</td>
+        <td>{{ item.UnitPrice }}</td>
+        <td>{{ item.Stock }}</td>
+        <td>{{ item.CategoryID }}</td>
+        <td>
+          <button (click)="openEditModal(item)">Editar</button>
+          <button>Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div *ngIf="!errorMessage && data.length === 0">
+  No data available.
+</div>
+
+<!-- Modal Edit -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close" (click)="closeEditModal()">&times;</span>
+    <h2>Editar Item</h2>
+    <form (ngSubmit)="updateItem()">
+      <label for="editProductName">Nombre:</label>
+      <input type="text" id="editProductName" name="editProductName" [(ngModel)]="selectedItem.ProductName" required><br>
+
+      <label for="editDescription">Descripción:</label>
+      <input type="text" id="editDescription" name="editDescription" [(ngModel)]="selectedItem.Description"><br>
+
+      <label for="editUnitPrice">Precio:</label>
+      <input type="number" id="editUnitPrice" name="editUnitPrice" [(ngModel)]="selectedItem.UnitPrice" required><br>
+
+      <label for="editStock">Stock:</label>
+      <input type="number" id="editStock" name="editStock" [(ngModel)]="selectedItem.Stock" required><br>
+
+      <label for="editCategoryID">Categoría ID:</label>
+      <input type="number" id="editCategoryID" name="editCategoryID" [(ngModel)]="selectedItem.CategoryID" required><br>
+
+      <button type="submit">Actualizar</button>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Add -->
+<div id="addModal" class="modal">
+  <div class="modal-content">
+    <span class="close" (click)="closeAddModal()">&times;</span>
+    <h2>Añadir Item</h2>
+    <form (ngSubmit)="addItem()">
+      <label for="addProductName">Nombre:</label>
+      <input type="text" id="addProductName" name="addProductName" [(ngModel)]="newItem.ProductName" required><br>
+
+      <label for="addDescription">Descripción:</label>
+      <input type="text" id="addDescription" name="addDescription" [(ngModel)]="newItem.Description"><br>
+
+      <label for="addUnitPrice">Precio:</label>
+      <input type="number" id="addUnitPrice" name="addUnitPrice" [(ngModel)]="newItem.UnitPrice" required><br>
+
+      <label for="addStock">Stock:</label>
+      <input type="number" id="addStock" name="addStock" [(ngModel)]="newItem.Stock" required><br>
+
+      <label for="addCategoryID">Categoría ID:</label>
+      <input type="number" id="addCategoryID" name="addCategoryID" [(ngModel)]="newItem.CategoryID" required><br>
+
+      <button type="submit">Agregar</button>
+    </form>
+  </div>
+</div>
