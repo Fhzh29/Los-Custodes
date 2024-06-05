@@ -1,11 +1,8 @@
-<div *ngIf="errorMessage">{{ errorMessage }}</div>
-<div *ngIf="!errorMessage && data.length > 0">
-  <ul>
-    <li *ngFor="let item of data">
-      {{ item.ProductID }} - {{ item.ProductName }} - {{ item.Description }} - ${{ item.UnitPrice }} - Stock: {{ item.Stock }} - CategoryID: {{ item.CategoryID }}
-    </li>
-  </ul>
+<!-- app.component.html -->
+<div class="menu">
+  <a routerLink="ventas-component">Ventas</a>
+  <a routerLink="gestion-inventario-component">Gestión de inventario</a>
+  <a routerLink="administracion-usuarios-component">Administración de Usuarios</a>
+  <a routerLink="busqueda-productos-component">Búsqueda de Productos</a>
 </div>
-<div *ngIf="!errorMessage && data.length === 0">
-  No data available.
-</div>
+<router-outlet></router-outlet>
