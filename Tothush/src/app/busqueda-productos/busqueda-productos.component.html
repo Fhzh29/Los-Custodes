@@ -1,1 +1,28 @@
-<p>busqueda-productos works!</p>
+<p><div class="venta-form">
+  <h2>Formulario de venta</h2>
+
+  <div class="seleccion-productos">
+    <h3>Seleccionar productos</h3>
+    <ng-select [items]="productos" [(ngModel)]="selectedProduct" (ngModelChange)="calcularTotal()">
+      <ng-option value="{{producto.id}}">{{producto.nombre}}</ng-option>
+    </ng-select>
+    <input type="number" [(ngModel)]="cantidad" placeholder="Cantidad">
+  </div>
+
+  <div class="total">
+    <h3>Total: $ {{total}}</h3>
+  </div>
+
+  <div class="opciones-pago">
+    <h3>Opciones de pago</h3>
+    <input type="radio" name="pago" id="tarjeta" [(ngModel)]="metodoPago" value="tarjeta">
+    <label for="tarjeta">Tarjeta de crédito</label><br>
+    <input type="radio" name="pago" id="paypal" [(ngModel)]="metodoPago" value="paypal">
+    <label for="paypal">PayPal</label><br>
+    <input type="radio" name="pago" id="transferencia" [(ngModel)]="metodoPago" value="transferencia">
+    <label for="transferencia">Transferencia bancaria</label>
+  </div>
+
+  <button type="button" (click)="realizarVenta()">Realizar venta</button>
+</div>
+</p>
