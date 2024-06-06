@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    this.dataService.getData().subscribe(
+    this.dataService.getData('Product').subscribe(
       (response) => {
         this.data = response;
       },
@@ -29,5 +29,5 @@ export class AppComponent implements OnInit {
         this.errorMessage = 'Error fetching data';
       }
     );
-  }
+  }  
 }

@@ -8,7 +8,7 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-// MySQL configuracion de conecxion
+// MySQL connection configuration
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -24,60 +24,69 @@ connection.connect(err => {
     console.log('Connected to MySQL');
 });
 
-// recuperar data
-app.get('/api/data', (req, res) => {
-    connection.query('SELECT * FROM Product', (err, results) => {
-        if (err) {
-            console.error('Error fetching data:', err);
-            res.status(500).send('Error fetching data');
-            return;
-        }
-        res.json(results);
+// Function to create CRUD routes for a given table
+const createCrudRoutes = (tableName) => {
+    // Get all data
+    app.get(`/api/${tableName}`, (req, res) => {
+        connection.query(`SELECT * FROM ${tableName}`, (err, results) => {
+            if (err) {
+                console.error(`Error fetching data from ${tableName}:`, err);
+                res.status(500).send(`Error fetching data from ${tableName}`);
+                return;
+            }
+            res.json(results);
+        });
     });
-});
 
-// insertar data
-app.post('/api/data', (req, res) => {
-    const { name, price, description } = req.body;
-    const query = 'INSERT INTO Product (name, price, description) VALUES (?, ?, ?)';
-    connection.query(query, [name, price, description], (err, results) => {
-        if (err) {
-            console.error('Error inserting data:', err);
-            res.status(500).send('Error inserting data');
-            return;
-        }
-        res.status(201).send('Data inserted successfully');
+    // Insert data
+    app.post(`/api/${tableName}`, (req, res) => {
+        const columns = Object.keys(req.body).join(', ');
+        const values = Object.values(req.body);
+        const placeholders = values.map(() => '?').join(', ');
+        const query = `INSERT INTO ${tableName} (${columns}) VALUES (${placeholders})`;
+        connection.query(query, values, (err, results) => {
+            if (err) {
+                console.error(`Error inserting data into ${tableName}:`, err);
+                res.status(500).send(`Error inserting data into ${tableName}`);
+                return;
+            }
+            res.status(201).send(`Data inserted successfully into ${tableName}`);
+        });
     });
-});
 
-// actualizar data
-app.put('/api/data/:id', (req, res) => {
-    const { id } = req.params;
-    const { name, price, description } = req.body;
-    const query = 'UPDATE Product SET name = ?, price = ?, description = ? WHERE id = ?';
-    connection.query(query, [name, price, description, id], (err, results) => {
-        if (err) {
-            console.error('Error updating data:', err);
-            res.status(500).send('Error updating data');
-            return;
-        }
-        res.send('Data updated successfully');
+    // Update data
+    app.put(`/api/${tableName}/:id`, (req, res) => {
+        const { id } = req.params;
+        const updates = Object.keys(req.body).map(key => `${key} = ?`).join(', ');
+        const values = [...Object.values(req.body), id];
+        const query = `UPDATE ${tableName} SET ${updates} WHERE id = ?`;
+        connection.query(query, values, (err, results) => {
+            if (err) {
+                console.error(`Error updating data in ${tableName}:`, err);
+                res.status(500).send(`Error updating data in ${tableName}`);
+                return;
+            }
+            res.send(`Data updated successfully in ${tableName}`);
+        });
     });
-});
 
-// borrar data
-app.delete('/api/data/:id', (req, res) => {
-    const { id } = req.params;
-    const query = 'DELETE FROM Product WHERE id = ?';
-    connection.query(query, [id], (err, results) => {
-        if (err) {
-            console.error('Error deleting data:', err);
-            res.status(500).send('Error deleting data');
-            return;
-        }
-        res.send('Data deleted successfully');
+    // Delete data
+    app.delete(`/api/${tableName}/:id`, (req, res) => {
+        const { id } = req.params;
+        const query = `DELETE FROM ${tableName} WHERE id = ?`;
+        connection.query(query, [id], (err, results) => {
+            if (err) {
+                console.error(`Error deleting data from ${tableName}:`, err);
+                res.status(500).send(`Error deleting data from ${tableName}`);
+                return;
+            }
+            res.send(`Data deleted successfully from ${tableName}`);
+        });
     });
-});
+};
+
+// Create CRUD routes for each table
+['Category', 'Customer', 'User', 'Product', 'Saledetail', 'Sale', 'Role'].forEach(createCrudRoutes);
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

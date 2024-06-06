@@ -22,7 +22,7 @@ export class GestionInventarioComponent {
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    this.dataService.getData().subscribe(
+    this.dataService.getData('Product').subscribe(
       (response) => {
         this.data = response;
       },
@@ -32,6 +32,7 @@ export class GestionInventarioComponent {
       }
     );
   }
+  
 
   openEditModal(item: any): void {
     this.selectedItem = { ...item };
