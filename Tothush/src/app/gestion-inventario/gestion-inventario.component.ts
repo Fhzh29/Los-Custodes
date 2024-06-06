@@ -22,6 +22,10 @@ export class GestionInventarioComponent {
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
+    this.loadData();
+  }
+
+  loadData() {
     this.dataService.getData('Product').subscribe(
       (response) => {
         this.data = response;
@@ -32,7 +36,6 @@ export class GestionInventarioComponent {
       }
     );
   }
-  
 
   openEditModal(item: any): void {
     this.selectedItem = { ...item };
@@ -44,8 +47,16 @@ export class GestionInventarioComponent {
   }
 
   updateItem(): void {
-    // Implement update logic here
-    this.closeEditModal();
+    this.dataService.updateData('Product', this.selectedItem.id, this.selectedItem).subscribe(
+      (response) => {
+        this.loadData(); // Refresh the data
+        this.closeEditModal();
+      },
+      (error) => {
+        console.error('Error updating item:', error);
+        this.errorMessage = 'Error updating item';
+      }
+    );
   }
 
   openAddModal(): void {
@@ -57,7 +68,28 @@ export class GestionInventarioComponent {
   }
 
   addItem(): void {
-    // Implement add logic here
-    this.closeAddModal();
+    this.dataService.insertData('Product', this.newItem).subscribe(
+      (response) => {
+        this.loadData(); // Refresh the data
+        this.closeAddModal();
+        this.newItem = {}; // Clear the new item form
+      },
+      (error) => {
+        console.error('Error adding item:', error);
+        this.errorMessage = 'Error adding item';
+      }
+    );
+  }
+
+  deleteItem(id: number): void {
+    this.dataService.deleteData('Product', id).subscribe(
+      (response) => {
+        this.loadData(); // Refresh the data
+      },
+      (error) => {
+        console.error('Error deleting item:', error);
+        this.errorMessage = 'Error deleting item';
+      }
+    );
   }
 }
