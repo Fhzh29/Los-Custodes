@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-venta-form',
-  templateUrl: './venta-form.component.html',
+  templateUrl: './busqueda-productos.component.html',
+  styleUrl: './busqueda-productos.component.scss',
 })
-export class VentaFormComponent {
+export class BusquedaProductosComponent {
   productos: any[] = [
     { id: 1, nombre: 'Producto 1', precio: 10 },
     { id: 2, nombre: 'Producto 2', precio: 20 },

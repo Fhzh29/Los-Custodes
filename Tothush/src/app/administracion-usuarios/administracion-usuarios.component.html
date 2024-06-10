@@ -1,1 +1,104 @@
-<p>administracion-usuarios works!</p>
+<div *ngIf="errorMessage">{{ errorMessage }}</div>
+<div>
+  <button (click)="openAddModal()">Añadir</button>
+</div>
+<div *ngIf="!errorMessage && data.length > 0">
+  <table>
+    <thead>
+      <tr>
+        <th>User ID</th>
+        <th>Nombre usuario</th>
+        <th>Contraseña</th>
+        <th>Nombres</th>
+        <th>Apellidos</th>
+        <th>Email</th>
+        <th>Celular</th>
+        <th>Fecha de contratación</th>
+        <th>Aciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of data">
+        <td>{{ item.UserID }}</td>
+        <td>{{ item.UserName }}</td>
+        <td>{{ item.UserPassword }}</td>
+        <td>{{ item.FirstName }}</td>
+        <td>{{ item.LastName }}</td>
+        <td>{{ item.Email }}</td>
+        <td>{{ item.Phone }}</td>
+        <td>{{ item.HireDate }}</td>
+        <td>
+          <button (click)="openEditModal(item)">Editar</button>
+          <button (click)="deleteItem(item)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div *ngIf="!errorMessage && data.length === 0">
+  No data available.
+</div>
+
+<!-- Modal Edit -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close" (click)="closeEditModal()">&times;</span>
+    <h2>Editar Usuario</h2>
+    <form (ngSubmit)="updateItem()">
+      <label for="editUserName">Nombre Usuario:</label>
+      <input type="text" id="editUserName" name="editUserName" [(ngModel)]="selectedItem.UserName" required><br>
+
+      <label for="editUserPassword">Contraseña:</label>
+      <input type="password" id="editUserPassword" name="editUserPassword" [(ngModel)]="selectedItem.UserPassword" required><br>
+
+      <label for="editFirstName">Nombres:</label>
+      <input type="text" id="editFirstName" name="editFirstName" [(ngModel)]="selectedItem.FirstName" required><br>
+
+      <label for="editLastName">Apellidos:</label>
+      <input type="text" id="editLastName" name="editLastName" [(ngModel)]="selectedItem.LastName" required><br>
+
+      <label for="editEmail">Email:</label>
+      <input type="email" id="editEmail" name="editEmail" [(ngModel)]="selectedItem.Email"><br>
+
+      <label for="editPhone">Celular:</label>
+      <input type="tel" id="editPhone" name="editPhone" [(ngModel)]="selectedItem.Phone"><br>
+
+      <label for="editHireDate">Fecha de contratación:</label>
+      <input type="date" id="editHireDate" name="editHireDate" [(ngModel)]="selectedItem.HireDate"><br>
+
+      <button type="submit">Actualizar</button>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Add -->
+<div id="addModal" class="modal">
+  <div class="modal-content">
+    <span class="close" (click)="closeAddModal()">&times;</span>
+    <h2>Añadir Usuario</h2>
+    <form (ngSubmit)="addItem()">
+      <label for="addUserName">Nombre Usuario:</label>
+      <input type="text" id="addUserName" name="addUserName" [(ngModel)]="newItem.UserName" required><br>
+
+      <label for="addUserPassword">Contraseña:</label>
+      <input type="password" id="addUserPassword" name="addUserPassword" [(ngModel)]="newItem.UserPassword" required><br>
+
+      <label for="addFirstName">Nombres:</label>
+      <input type="text" id="addFirstName" name="addFirstName" [(ngModel)]="newItem.FirstName" required><br>
+
+      <label for="addLastName">Apellidos:</label>
+      <input type="text" id="addLastName" name="addLastName" [(ngModel)]="newItem.LastName" required><br>
+
+      <label for="addEmail">Email:</label>
+      <input type="email" id="addEmail" name="addEmail" [(ngModel)]="newItem.Email"><br>
+
+      <label for="addPhone">Celular:</label>
+      <input type="tel" id="addPhone" name="addPhone" [(ngModel)]="newItem.Phone"><br>
+
+      <label for="addHireDate">Fecha de contratación:</label>
+      <input type="date" id="addHireDate" name="addHireDate" [(ngModel)]="newItem.HireDate"><br>
+
+      <button type="submit">Agregar</button>
+    </form>
+  </div>
+</div>
