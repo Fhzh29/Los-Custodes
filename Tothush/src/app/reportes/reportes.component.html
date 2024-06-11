@@ -1,0 +1,33 @@
+<div class="reports-container">
+    <h2>Reportes</h2>
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+    <div *ngIf="!errorMessage">
+      <table class="reports-table">
+        <thead>
+          <tr>
+            <th>Venta ID</th>
+            <th>Fecha Venta</th>
+            <th>Cliente</th>
+            <th>Usuario</th>
+            <th>Nombre Producto</th>
+            <th>Precio único</th>
+            <th>Cantidad</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let report of data">
+            <td>{{ report.SaleID }}</td>
+            <td>{{ report.SaleDate }}</td>
+            <td>{{ report.CustomerFirstName }} {{ report.CustomerLastName }}</td>
+            <td>{{ report.UserFirstName }} {{ report.UserLastName }}</td>
+            <td>{{ report.ProductName }}</td>
+            <td>{{ report.UnitPrice }}</td>
+            <td>{{ report.Quantity }}</td>
+            <td>{{ report.Subtotal }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

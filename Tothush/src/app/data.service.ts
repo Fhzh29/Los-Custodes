@@ -14,6 +14,10 @@ export class DataService {
   getData(tableName: string): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/${tableName}`);
   }
+ 
+  getDataReports(): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/report`, {});
+  }
 
   // Insert data into a specific table
   insertData(tableName: string, data: any): Observable<any> {
