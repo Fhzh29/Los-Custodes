@@ -53,13 +53,48 @@ const createCrudRoutes = (tableName) => {
             res.status(201).send(`Data inserted successfully into ${tableName}`);
         });
     });
+    
+    // get report data
+    app.post(`/api/report`, (req, res) => {
+        const values = Object.values(req.body);
+        const placeholders = values.map(() => '?').join(', ');
+        const query = `SELECT
+            S.SaleID,
+            S.SaleDate,
+            C.FirstName AS CustomerFirstName,
+            C.LastName AS CustomerLastName,
+            U.FirstName AS UserFirstName,
+            U.LastName AS UserLastName,
+            P.ProductName,
+            P.UnitPrice,
+            SD.Quantity,
+            SD.Subtotal
+        FROM
+            Sale AS S
+        INNER JOIN
+            Customer AS C ON S.CustomerID = C.CustomerID
+        INNER JOIN
+            User AS U ON S.UserID = U.UserID
+        INNER JOIN
+            SaleDetail AS SD ON S.SaleID = SD.SaleID
+        INNER JOIN
+            Product AS P ON SD.ProductID = P.ProductID`;
+        connection.query(query, values, (err, results) => {
+            if (err) {
+                console.error(`Error retrieving report data:`, err);
+                res.status(500).send(`Error retrieving report data`);
+                return;
+            }
+            res.status(200).json(results);
+        });
+    });
 
     // Update data
     app.put(`/api/${tableName}/:id`, (req, res) => {
         const { id } = req.params;
         const updates = Object.keys(req.body).map(key => `${key} = ?`).join(', ');
         const values = [...Object.values(req.body), id];
-        const query = `UPDATE ${tableName} SET ${updates} WHERE id = ?`;
+        const query = `UPDATE ${tableName} SET ${updates} WHERE ${tableName}ID = ?`;
         connection.query(query, values, (err, results) => {
             if (err) {
                 console.error(`Error updating data in ${tableName}:`, err);
@@ -73,7 +108,7 @@ const createCrudRoutes = (tableName) => {
     // Delete data
     app.delete(`/api/${tableName}/:id`, (req, res) => {
         const { id } = req.params;
-        const query = `DELETE FROM ${tableName} WHERE id = ?`;
+        const query = `DELETE FROM ${tableName} WHERE ${tableName}ID = ?`;
         connection.query(query, [id], (err, results) => {
             if (err) {
                 console.error(`Error deleting data from ${tableName}:`, err);

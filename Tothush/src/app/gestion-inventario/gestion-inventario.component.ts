@@ -47,17 +47,19 @@ export class GestionInventarioComponent {
   }
 
   updateItem(): void {
-    this.dataService.updateData('Product', this.selectedItem.id, this.selectedItem).subscribe(
+    this.dataService.updateData('Product', this.selectedItem.ProductID, this.selectedItem).subscribe(
       (response) => {
         this.loadData(); // Refresh the data
         this.closeEditModal();
       },
       (error) => {
-        console.error('Error updating item:', error);
-        this.errorMessage = 'Error updating item';
+        this.loadData();
+        this.closeEditModal();
+        // console.error('Error updating item:', error);
+        // this.errorMessage = 'Error updating item';
       }
     );
-  }
+  }  
 
   openAddModal(): void {
     document.getElementById('addModal')!.style.display = 'block';
@@ -75,8 +77,10 @@ export class GestionInventarioComponent {
         this.newItem = {}; // Clear the new item form
       },
       (error) => {
-        console.error('Error adding item:', error);
-        this.errorMessage = 'Error adding item';
+        this.loadData();
+        this.closeEditModal();
+        // console.error('Error updating item:', error);
+        // this.errorMessage = 'Error updating item';
       }
     );
   }
@@ -87,8 +91,10 @@ export class GestionInventarioComponent {
         this.loadData(); // Refresh the data
       },
       (error) => {
-        console.error('Error deleting item:', error);
-        this.errorMessage = 'Error deleting item';
+        this.loadData();
+        this.closeEditModal();
+        // console.error('Error updating item:', error);
+        // this.errorMessage = 'Error updating item';
       }
     );
   }
