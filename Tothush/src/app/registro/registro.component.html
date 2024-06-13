@@ -1,0 +1,26 @@
+<div class="reports-container">
+    <h2>Reportes de Actividad</h2>
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+    <div *ngIf="!errorMessage">
+        <table class="reports-table">
+            <thead>
+                <tr>
+                    <th>Log ID</th>
+                    <th>Tipo de Operación</th>
+                    <th>Nombre de la Tabla</th>
+                    <th>Hora de la Operación</th>
+                    <th>Nombre de Usuario</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let log of data">
+                    <td>{{ log.LogID }}</td>
+                    <td>{{ log.OperationType }}</td>
+                    <td>{{ log.TableName }}</td>
+                    <td>{{ log.OperationTime }}</td>
+                    <td>{{ log.UserName }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
