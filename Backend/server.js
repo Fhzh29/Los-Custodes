@@ -38,6 +38,18 @@ const createCrudRoutes = (tableName) => {
         });
     });
 
+    app.get('/api/ActivityLog', (req, res) => {
+        const tableName = 'ActivityLog';
+        connection.query(`SELECT * FROM ${tableName}`, (err, results) => {
+          if (err) {
+            console.error(`Error fetching data from ${tableName}:`, err);
+            res.status(500).send(`Error fetching data from ${tableName}`);
+            return;
+          }
+          res.json(results);
+        });
+      });
+
     // Insert data
     app.post(`/api/${tableName}`, (req, res) => {
         const columns = Object.keys(req.body).join(', ');

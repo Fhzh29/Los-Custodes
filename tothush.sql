@@ -401,3 +401,164 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+-- Create the log table to store database activity
+CREATE TABLE ActivityLog (
+    LogID INT AUTO_INCREMENT PRIMARY KEY,
+    OperationType VARCHAR(10),
+    TableName VARCHAR(255),
+    OperationTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UserName VARCHAR(255)
+);
+
+-- Create a trigger to log INSERT operations
+DELIMITER $$
+CREATE TRIGGER LogInsert AFTER INSERT ON `Category`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('INSERT', 'Category', USER());
+END$$
+
+CREATE TRIGGER LogInsertCustomer AFTER INSERT ON `Customer`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('INSERT', 'Customer', USER());
+END$$
+
+CREATE TRIGGER LogInsertUser AFTER INSERT ON `User`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('INSERT', 'User', USER());
+END$$
+
+CREATE TRIGGER LogInsertRole AFTER INSERT ON `Role`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('INSERT', 'Role', USER());
+END$$
+
+CREATE TRIGGER LogInsertProduct AFTER INSERT ON `Product`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('INSERT', 'Product', USER());
+END$$
+
+CREATE TRIGGER LogInsertSaledetail AFTER INSERT ON `Saledetail`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('INSERT', 'Saledetail', USER());
+END$$
+
+CREATE TRIGGER LogInsertSale AFTER INSERT ON `Sale`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('INSERT', 'Sale', USER());
+END$$
+
+-- Create triggers for UPDATE operations
+CREATE TRIGGER LogUpdate AFTER UPDATE ON `Category`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('UPDATE', 'Category', USER());
+END$$
+
+CREATE TRIGGER LogUpdateCustomer AFTER UPDATE ON `Customer`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('UPDATE', 'Customer', USER());
+END$$
+
+CREATE TRIGGER LogUpdateUser AFTER UPDATE ON `User`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('UPDATE', 'User', USER());
+END$$
+
+CREATE TRIGGER LogUpdateRole AFTER UPDATE ON `Role`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('UPDATE', 'Role', USER());
+END$$
+
+CREATE TRIGGER LogUpdateProduct AFTER UPDATE ON `Product`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('UPDATE', 'Product', USER());
+END$$
+
+CREATE TRIGGER LogUpdateSaledetail AFTER UPDATE ON `Saledetail`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('UPDATE', 'Saledetail', USER());
+END$$
+
+CREATE TRIGGER LogUpdateSale AFTER UPDATE ON `Sale`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('UPDATE', 'Sale', USER());
+END$$
+
+-- Create triggers for DELETE operations
+CREATE TRIGGER LogDelete AFTER DELETE ON `Category`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('DELETE', 'Category', USER());
+END$$
+
+CREATE TRIGGER LogDeleteCustomer AFTER DELETE ON `Customer`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('DELETE', 'Customer', USER());
+END$$
+
+CREATE TRIGGER LogDeleteUser AFTER DELETE ON `User`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('DELETE', 'User', USER());
+END$$
+
+CREATE TRIGGER LogDeleteRole AFTER DELETE ON `Role`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('DELETE', 'Role', USER());
+END$$
+
+CREATE TRIGGER LogDeleteProduct AFTER DELETE ON `Product`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('DELETE', 'Product', USER());
+END$$
+
+CREATE TRIGGER LogDeleteSaledetail AFTER DELETE ON `Saledetail`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('DELETE', 'Saledetail', USER());
+END$$
+
+CREATE TRIGGER LogDeleteSale AFTER DELETE ON `Sale`
+FOR EACH ROW
+BEGIN
+    INSERT INTO ActivityLog (OperationType, TableName, UserName)
+    VALUES ('DELETE', 'Sale', USER());
+END$$
+DELIMITER ;
